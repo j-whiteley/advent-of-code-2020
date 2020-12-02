@@ -1,45 +1,43 @@
 use std::fs;
 
 
-struct Password_Policy {
+struct PasswordPolicy {
     minimum: usize,
     maximum: usize,
     policy_char: String,
     password: String
 }
 
-fn parse_password_policy(input: String) -> Password_Policy {
+fn parse_password_policy(input: String) -> PasswordPolicy {
 
     let parts = input.split(": ").collect::<Vec<&str>>();
-    let myPassword = parts[1];
-    let policyParts = parts[0].split(" ").collect::<Vec<&str>>();
-    let numberParts = policyParts[0].split("-").collect::<Vec<&str>>();
-    let myMinimum = numberParts[0].parse::<usize>().unwrap();
-    let myMaximum = numberParts[1].parse::<usize>().unwrap();
+    let my_password = parts[1];
+    let policy_parts = parts[0].split(" ").collect::<Vec<&str>>();
+    let number_parts = policy_parts[0].split("-").collect::<Vec<&str>>();
+    let my_minimum = number_parts[0].parse::<usize>().unwrap();
+    let my_maximum = number_parts[1].parse::<usize>().unwrap();
 
-    Password_Policy {
-        minimum: myMinimum,
-        maximum: myMaximum,
-        policy_char: policyParts[1].to_string(),
-        password: myPassword.to_string()
+    PasswordPolicy {
+        minimum: my_minimum,
+        maximum: my_maximum,
+        policy_char: policy_parts[1].to_string(),
+        password: my_password.to_string()
     }
 }
 
-fn does_password_match_policy(policy: Password_Policy) -> bool {
+fn does_password_match_policy(policy: &PasswordPolicy) -> bool {
     let count = policy.password.matches(&policy.policy_char).count();
 
-    return (count >= policy.minimum && count <= policy.maximum);
+    return count >= policy.minimum && count <= policy.maximum;
 }
 
-fn does_password_match_other_policy(policy: Password_Policy) -> bool {
+fn does_password_match_other_policy(policy: &PasswordPolicy) -> bool {
     let first_char = &policy.password[(policy.minimum-1)..policy.minimum];
 
     let second_char = &policy.password[(policy.maximum-1)..policy.maximum];
 
-    let first_char_matches = (first_char == policy.policy_char);
-    let second_char_matches = (second_char == policy.policy_char);
-
-    // println!("Password : {}, first char {}-{}, second char {}-{}", policy.password, first_char, first_char_matches, second_char, second_char_matches);
+    let first_char_matches = first_char == policy.policy_char;
+    let second_char_matches = second_char == policy.policy_char;
 
     return first_char_matches != second_char_matches;
 }
@@ -61,11 +59,11 @@ pub fn day_two(args: &Vec<String>) {
 
         for line in split {
             let line_policy = parse_password_policy(line.to_string());
-            // if does_password_match_policy(line_policy) {
-            //     valid_counter += 1;
-            // }
+            if does_password_match_policy(&line_policy) {
+                valid_counter += 1;
+            }
 
-            if does_password_match_other_policy(line_policy) {
+            if does_password_match_other_policy(&line_policy) {
                 valid_counter_other += 1;
             }
         }

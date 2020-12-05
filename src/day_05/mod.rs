@@ -1,5 +1,11 @@
 use std::fs;
 
+/// Parse a seat id from a code
+/// 
+/// ```
+/// let seat_id = parse_seat_id("BFFFBBFRRR".to_string());
+/// assert_eq!(seat_id,567);
+/// '''
 fn parse_seat_id(seat_id_enc : String) -> isize {
 
     let row_enc = &seat_id_enc[0..7];
@@ -67,4 +73,17 @@ pub fn day_five(args: &Vec<String>) {
     {
         println!("day_five needs 2 args\n");
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_seat_id() {
+        assert_eq!(parse_seat_id("BFFFBBFRRR".to_string()),567);
+        assert_eq!(parse_seat_id("FFFBBBFRRR".to_string()),119);
+        assert_eq!(parse_seat_id("BBFFBBFRLL".to_string()),820);
+    }
+
 }

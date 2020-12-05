@@ -33,7 +33,7 @@ pub fn day_five(args: &Vec<String>) {
 
         let mut occupied = Vec::new();
 
-        for i in 0..1024 {
+        for _i in 0..1024 {
             occupied.push(true);
         }
 

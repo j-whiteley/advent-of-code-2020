@@ -82,8 +82,7 @@ fn rec_count_bags(key: String, map: &mut HashMap<String,BagSpec>) -> usize {
     } else {
         count = 1;
     }
-
-    println!("{} cotnains {} bags", key, count);
+ 
     return count;
 }
 

@@ -56,9 +56,9 @@ pub fn day_ten(args: &Vec<String>) {
         numbers.push(previous_number + 3);
 
         for _i in 1..numbers.len() {
-            memo_array.push(0);
+            memo_array.push(0 as i64);
         }
-        memo_array.push(1);
+        memo_array.push(1 as i64);
 
         let mut pointer = numbers.len() - 1;
 
@@ -75,7 +75,10 @@ pub fn day_ten(args: &Vec<String>) {
 
                 for k in 1..4 {
                     if i_num + k == i_j_num {
-                        memo_array.insert(i,memo_array.get(i).unwrap() + memo_array.get(i+j).unwrap());
+                        // println!("{} reachable from {} by {}", i_num, i_j_num, k);
+                        let reachable = memo_array.get(i).unwrap() + memo_array.get(i+j).unwrap();
+                        println!("{} reachable in {} ways", i_num, reachable);
+                        memo_array[i] =reachable ;
                     } 
                 }
 
@@ -90,7 +93,7 @@ pub fn day_ten(args: &Vec<String>) {
         //     println!("me : {}", me);
         // }
 
-        println!("Paths at 0, {}", memo_array.get(0).unwrap());
+        println!("Paths at 0, {} len: {}", memo_array.get(0).unwrap(), memo_array.len());
     }
     else
     {

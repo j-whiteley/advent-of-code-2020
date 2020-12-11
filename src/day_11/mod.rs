@@ -84,6 +84,75 @@ fn run_generation(input_table: Vec<Vec<Cell>>) -> (Vec<Vec<Cell>>, bool) {
     return (output_table, stable);
 }
 
+fn run_generation_two(input_table: Vec<Vec<Cell>>) -> (Vec<Vec<Cell>>, bool) {
+    let mut output_table = Vec::new();
+    let mut stable = true;
+
+    for (i, input_row) in input_table.iter().enumerate() {
+        let mut output_row = Vec::new();
+
+        for (j, input_cell) in input_row.iter().enumerate() {
+            let mut occupied_count = 0;
+            for i_offset in -1..2 {
+                    for j_offset in -1..2 {
+                        if i_offset != 0 || j_offset != 0 {
+                            let mut found = false;
+                            let mut multiplier = 1;
+
+                            while !found {
+                                //check bounds
+                                let i_adj = i as isize + (i_offset * multiplier);
+                                let j_adj = j as isize + (j_offset * multiplier);
+
+                                if i_adj >= 0 && i_adj < input_table.len() as isize && j_adj >= 0 && j_adj < input_row.len() as isize {
+                                    match input_table[i_adj as usize][j_adj as usize] {
+                                        Cell::OCCUPIED => {
+                                            occupied_count += 1;
+                                            found = true;
+                                        },
+                                        Cell::EMPTY => {
+                                            found = true;
+                                        },
+                                        Cell::FLOOR => {}
+                                    }
+                                } else {
+                                    //out of bounds
+                                    found = true;
+                                }
+
+                                multiplier += 1;
+                            }
+                        }
+                }
+            }
+            match input_cell {
+                Cell::EMPTY => {
+                    if occupied_count > 0 {
+                        output_row.push(Cell::EMPTY);
+                    } else {
+                        stable = false;
+                        output_row.push(Cell::OCCUPIED);
+                    }
+                },
+                Cell::OCCUPIED => {
+                    if occupied_count >= 5 {
+                        stable = false;
+                        output_row.push(Cell::EMPTY);
+                    } else {
+                        output_row.push(Cell::OCCUPIED);
+                    }
+                },
+                Cell::FLOOR => output_row.push(Cell::FLOOR)
+            }
+        }
+
+        output_table.push(output_row);
+    }
+
+    return (output_table, stable);
+}
+
+
 fn print_table(input_table: &Vec<Vec<Cell>>) {
     for input_row in input_table.iter() {
         for input_cell in input_row.iter() {
@@ -121,6 +190,30 @@ pub fn day_eleven(args: &Vec<String>) {
         }
 
         let mut occupied_count = 0;
+
+        for current_row in current_table.iter() {
+            for current_cell in current_row.iter() {
+                if *current_cell == Cell::OCCUPIED {
+                    occupied_count += 1;
+                }
+            }
+        }
+
+        println!("occ count: {}", occupied_count);
+
+        current_table = create_cell_table_from_string(&contents);
+        
+        stable = false;
+
+        while !stable {
+            let (current_table_a, stable_a) = run_generation_two(current_table);
+            current_table = current_table_a;
+            stable = stable_a;
+
+            // print_table(&current_table);
+        }
+
+        occupied_count = 0;
 
         for current_row in current_table.iter() {
             for current_cell in current_row.iter() {
@@ -182,4 +275,20 @@ mod tests {
 
     }
     
+
+    #[test]
+    fn test_run_generation_two() {
+        let cell_table = create_cell_table_from_string(&"L..\n.L.\n..L".to_string());
+
+        let (next_table,stable) = run_generation_two(cell_table);
+
+        print_table(&next_table);
+
+        assert_eq!(next_table.len(),3);
+        assert_eq!(next_table[0].len(),3);
+        assert_eq!(next_table[0][0], Cell::OCCUPIED);
+        assert_ne!(next_table[0][0], Cell::FLOOR);
+        assert_eq!(next_table[0][1], Cell::FLOOR);
+        assert!(!stable);
+    }
 }

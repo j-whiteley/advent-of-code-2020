@@ -153,7 +153,7 @@ fn run_generation_two(input_table: Vec<Vec<Cell>>) -> (Vec<Vec<Cell>>, bool) {
 }
 
 
-fn print_table(input_table: &Vec<Vec<Cell>>) {
+fn _print_table(input_table: &Vec<Vec<Cell>>) {
     for input_row in input_table.iter() {
         for input_cell in input_row.iter() {
             match input_cell {
@@ -253,7 +253,7 @@ mod tests {
 
         let (next_table,stable) = run_generation(cell_table);
 
-        print_table(&next_table);
+        //print_table(&next_table);
 
         assert_eq!(next_table.len(),3);
         assert_eq!(next_table[0].len(),3);
@@ -266,12 +266,12 @@ mod tests {
     #[test]
     fn test_two_gens() {
         let cell_table = create_cell_table_from_string(&"LLL\nLLL\nLLL".to_string());
-        print_table(&cell_table);
+        //print_table(&cell_table);
 
         let (next_table,_stable) = run_generation(cell_table);
-        print_table(&next_table);
-        let (next_table_2,_stable_2) = run_generation(next_table);
-        print_table(&next_table_2);
+        //print_table(&next_table);
+        let (_next_table_2,_stable_2) = run_generation(next_table);
+        //print_table(&next_table_2);
 
     }
     
@@ -282,7 +282,7 @@ mod tests {
 
         let (next_table,stable) = run_generation_two(cell_table);
 
-        print_table(&next_table);
+        //print_table(&next_table);
 
         assert_eq!(next_table.len(),3);
         assert_eq!(next_table[0].len(),3);

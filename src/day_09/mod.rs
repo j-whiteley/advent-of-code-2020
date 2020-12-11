@@ -63,7 +63,7 @@ pub fn day_nine(args: &Vec<String>) {
 
         let mut current_chain = VecDeque::new();
         
-        let mut current_sum = second_numbers.pop_front().unwrap();
+        let current_sum = second_numbers.pop_front().unwrap();
 
         current_chain.push_back(current_sum);
 

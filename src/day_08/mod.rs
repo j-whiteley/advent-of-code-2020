@@ -5,6 +5,7 @@ struct Instruction {
     numerator : isize
 }
 
+#[allow(unused_assignments)]
 impl Instruction {
     fn new(input:&String) -> Instruction {
         let parts = input.split(" ").collect::<Vec<&str>>();

@@ -12,6 +12,7 @@ mod day_08;
 mod day_09;
 mod day_10;
 mod day_11;
+mod day_12;
 use std::env;
 
 fn main() {
@@ -32,6 +33,7 @@ fn main() {
             "day_nine" => day_09::day_nine(&args),
             "day_ten" => day_10::day_ten(&args),
             "day_eleven" => day_11::day_eleven(&args),
+            "day_twelve" => day_12::day_twelve(&args),
             _ => println!("Not a valid day\n")
         }
     }

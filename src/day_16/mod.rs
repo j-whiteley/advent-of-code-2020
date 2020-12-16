@@ -1,5 +1,6 @@
 use std::fs;
 use std::collections::HashSet;
+use std::collections::HashMap;
 
 struct Range {
     name: String,
@@ -116,35 +117,40 @@ pub fn day_sixteen(args: &Vec<String>) {
 
         println!("Part one: {}", error_count);
 
-        // let mut some_columns_have_move_than = true;
+        let mut index_terms : HashMap<usize,String> = HashMap::new();
 
-        // while some_columns_have_move_than {
-        //     some_columns_have_move_than = false;
+        let mut some_columns_have_move_than = true;
 
-        //     for (i,column_set) in column_sets.iter().enumerate() {
-        //         if column_set.len() == 1 {
-        //             for value in column_set.iter() {
-        //                 for (j,other_column_set) in column_sets.iter().enumerate() {
-        //                     if i != j {
-        //                         other_column_set.remove(value);
-        //                     }
-        //                 }
-        //             } 
+        while some_columns_have_move_than {
+            some_columns_have_move_than = false;
 
-        //         } else if column_set.len() > 1{
-        //             some_columns_have_move_than = true;
-        //         }
-        //     }
-        // }
+            for (i,column_set) in column_sets.iter_mut().enumerate() {
 
-        // CBA doing all this set removal arse in Rust so doing by hand
+                for term in index_terms.values() {
+                    column_set.remove(&term.clone());
+                }
 
-        for (i,column_set) in column_sets.iter().enumerate() {
-            println!("{}",i);
-            for j in column_set.iter() {
-                println!("Col {} is {}", i,j);
+                if column_set.len() == 1 {
+                    for value in column_set.iter() {
+                        index_terms.insert(i,value.clone());
+                    } 
+
+                } else if column_set.len() > 1 {
+                    some_columns_have_move_than = true;
+                }
             }
         }
+
+        let mut part_2 = 1;
+
+        for (key,value) in index_terms.iter() {
+            if value.starts_with("departure") {
+                part_2 *= my_numbers[*key];
+            }
+        }
+
+        println!("Part 2: {}", part_2);
+
 
     }
     else
